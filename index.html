@@ -11,13 +11,15 @@
       var simulation = d3.forceSimulation(nodes)
         .velocityDecay(0.2)
         .on("tick", ticked)
-        .force("collide", d3.forceCollide().radius(function (d) { return d.r }).iterations(2).strength(0.1))
+        .force("collide", d3.forceCollide().radius(function (d) { return d.r }).iterations(2).strength(0.2))
+        .force('x', d3.forceX(250).strength(0.1))
+        .force('y', d3.forceY(490).strength(0.1))
 
       function ticked() {
         let u = d3.select("#svg").selectAll('circle').data(nodes);
         u.enter()
           .append('circle')
-          .attr('r', 5)
+          .attr('r', function(d){return d.r})
           .merge(u)
           .attr('cx', function(d) {
             return d.x
@@ -25,6 +27,7 @@
           .attr('cy', function(d) {
             return d.y
           })
+          .on('click', () => console.log('clicked'))
 
         u.exit().remove();
       }
