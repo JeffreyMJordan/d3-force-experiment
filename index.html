@@ -2,39 +2,31 @@
   <script src="https://d3js.org/d3.v4.min.js"></script>
   <script>
     document.addEventListener('DOMContentLoaded', () => {
-      var canvas = document.querySelector("canvas"),
-        context = canvas.getContext("2d"),
-        width = canvas.width,
-        height = canvas.height,
-        tau = 2 * Math.PI;
 
       var nodes = d3.range(40).map(function (i) {
         return {
-          r: 20
+          r: 20,
         };
       });
-
       var simulation = d3.forceSimulation(nodes)
         .velocityDecay(0.2)
         .on("tick", ticked)
         .force("collide", d3.forceCollide().radius(function (d) { return d.r }).iterations(2).strength(0.1))
 
       function ticked() {
-        context.clearRect(0, 0, width, height);
-        context.save();
-        context.translate(width / 2, height / 2);
+        let u = d3.select("#svg").selectAll('circle').data(nodes);
+        u.enter()
+          .append('circle')
+          .attr('r', 5)
+          .merge(u)
+          .attr('cx', function(d) {
+            return d.x
+          })
+          .attr('cy', function(d) {
+            return d.y
+          })
 
-        context.beginPath();
-        nodes.forEach(function (d) {
-          context.moveTo(d.x + d.r, d.y);
-          context.arc(d.x, d.y, d.r, 0, tau);
-        });
-        context.fillStyle = "#ddd";
-        context.fill();
-        context.strokeStyle = "#333";
-        context.stroke();
-
-        context.restore();
+        u.exit().remove();
       }
     })
   </script>
@@ -42,5 +34,5 @@
 </head>
 
 <body>
-  <canvas id="svg" width="500" height="500" />
+  <svg id="svg" width="500" height="500" />
 </body>
