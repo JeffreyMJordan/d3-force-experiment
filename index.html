@@ -14,7 +14,7 @@
       var simulation = d3.forceSimulation(nodes)
         .velocityDecay(0.3)
         .on("tick", ticked)
-        .force("collide", d3.forceCollide().radius(function (d) { return d.r }).iterations(2).strength(11))
+        .force("collide", d3.forceCollide().radius(function (d) { return d.r }).iterations(2).strength(5))
         // .force('x', d3.forceX().strength(0.02))
         // .force('y', d3.forceY().strength(0.02))
         .on('end', () => console.log("simulation ended"))
