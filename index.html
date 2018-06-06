@@ -9,14 +9,21 @@
         };
       });
       var simulation = d3.forceSimulation(nodes)
-        .velocityDecay(0.2)
         .on("tick", ticked)
         .force("collide", d3.forceCollide().radius(function (d) { return d.r }).iterations(2).strength(0.2))
-        .force('x', d3.forceX(250).strength(0.1))
-        .force('y', d3.forceY(490).strength(0.1))
+        .force('x', d3.forceX().strength(0.1))
+        .force('y', d3.forceY().strength(0.1))
+
+      function drag(e){
+        d3.select(this).attr('cx', e.x = d3.event.x).attr('cy', e.y = d3.event.y);
+      }
+
+      function dragStart(e){
+        console.log(e)
+      }
 
       function ticked() {
-        let u = d3.select("#svg").selectAll('circle').data(nodes);
+        let u = d3.select("#svg").selectAll('circle').data(nodes).call(d3.drag().on("start", dragStart).on("drag", drag));
         u.enter()
           .append('circle')
           .attr('r', function(d){return d.r})
@@ -26,8 +33,7 @@
           })
           .attr('cy', function(d) {
             return d.y
-          })
-          .on('click', () => console.log('clicked'))
+          });
 
         u.exit().remove();
       }
