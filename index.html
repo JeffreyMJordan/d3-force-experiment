@@ -8,13 +8,14 @@
       var nodes = d3.range(40).map(function (i) {
         return {
           r: 20,
+          x: i*20
         };
       });
       var simulation = d3.forceSimulation(nodes)
         .on("tick", ticked)
-        .force("collide", d3.forceCollide().radius(function (d) { return d.r }).iterations(2).strength(0.4))
-        .force('x', d3.forceX().strength(0.02))
-        .force('y', d3.forceY().strength(0.02))
+        .force("collide", d3.forceCollide().radius(function (d) { return d.r }).iterations(2).strength(1))
+        // .force('x', d3.forceX().strength(0.02))
+        // .force('y', d3.forceY().strength(0.02))
         .on('end', () => console.log("simulation ended"))
 
       function drag(e){
@@ -22,7 +23,7 @@
       }
 
       function dragStart(e){
-        console.log(e)
+        simulation.alphaTarget(0.3).restart();
       }
 
       function ticked() {
