@@ -3,20 +3,23 @@
   <script src="https://d3js.org/d3.v4.min.js"></script>
   <script>
 
-    const fn = () => {
+    const fn = (event={}) => {
+      console.log(event)
 
-      var nodes = d3.range(40).map(function (i) {
+      var nodes = d3.range(20).map(function (i) {
         return {
           r: 20,
-          x: i*20
         };
       });
       var simulation = d3.forceSimulation(nodes)
+        .velocityDecay(0.8)
         .on("tick", ticked)
         .force("collide", d3.forceCollide().radius(function (d) { return d.r }).iterations(2).strength(1))
         // .force('x', d3.forceX().strength(0.02))
         // .force('y', d3.forceY().strength(0.02))
         .on('end', () => console.log("simulation ended"))
+        .force('center', d3.forceCenter(event.clientX || 250, event.clientY || 250))
+        // .force("charge", d3.forceManyBody())
 
       function drag(e){
         d3.select(this).attr('cx', e.x = d3.event.x).attr('cy', e.y = d3.event.y);
@@ -43,7 +46,11 @@
         console.log('tick')
       }
     }
-    document.addEventListener('DOMContentLoaded', fn);
+    document.addEventListener('DOMContentLoaded', () => {
+        fn();
+        d3.select("#svg").on('click', () => {fn(d3.event)})
+      });
+    
     // window.setInterval(fn, 1000);
   </script>
 
