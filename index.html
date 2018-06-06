@@ -1,7 +1,9 @@
+<meta charset="UTF-8"> 
 <head>
   <script src="https://d3js.org/d3.v4.min.js"></script>
   <script>
-    document.addEventListener('DOMContentLoaded', () => {
+
+    const fn = () => {
 
       var nodes = d3.range(40).map(function (i) {
         return {
@@ -10,9 +12,10 @@
       });
       var simulation = d3.forceSimulation(nodes)
         .on("tick", ticked)
-        .force("collide", d3.forceCollide().radius(function (d) { return d.r }).iterations(2).strength(0.2))
-        .force('x', d3.forceX().strength(0.1))
-        .force('y', d3.forceY().strength(0.1))
+        .force("collide", d3.forceCollide().radius(function (d) { return d.r }).iterations(2).strength(0.4))
+        .force('x', d3.forceX().strength(0.02))
+        .force('y', d3.forceY().strength(0.02))
+        .on('end', () => console.log("simulation ended"))
 
       function drag(e){
         d3.select(this).attr('cx', e.x = d3.event.x).attr('cy', e.y = d3.event.y);
@@ -36,8 +39,11 @@
           });
 
         u.exit().remove();
+        console.log('tick')
       }
-    })
+    }
+    document.addEventListener('DOMContentLoaded', fn);
+    // window.setInterval(fn, 1000);
   </script>
 
 </head>
